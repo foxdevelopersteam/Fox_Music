@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fox Music 🦊</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#f2701d"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#fff;--bg2:#f5f1ed;--ink:#1c1410;--mute:#8d7f74;--fox:#f2701d;--line:#e9e0d7;--glass:rgba(255,255,255,.82);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120b07;--bg2:#1f140e;--ink:#fbeee0;--mute:#b39b88;--line:#33231a;--glass:rgba(24,15,10,.82);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#120b07;--bg2:#1f140e;--ink:#fbeee0;--mute:#b39b88;--line:#33231a;--glass:rgba(24,15,10,.82);color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:12}
+button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;align-items:center;padding:14px 18px 8px;background:var(--glass);backdrop-filter:blur(14px)}
+h1{font-size:2rem;font-weight:800}
+#theme{border:1px solid var(--line);background:var(--bg2);border-radius:50%;width:38px;height:38px}
+main{padding:0 18px 170px;max-width:900px;margin:auto}
+.view{display:none}.view.on{display:block}
+h2{font-size:1.2rem;margin:22px 0 10px}
+.hs{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px}
+.card{flex:none;width:140px;cursor:pointer}
+.card b,.rt b{display:block;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card small,.rt small{color:var(--mute);font-size:.8rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.art{position:relative;display:grid;place-items:center;overflow:hidden;border-radius:12px;font-size:2rem;color:#fff}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .art{width:140px;height:140px;margin-bottom:6px}
+.row{display:flex;align-items:center;gap:12px;padding:8px 6px;border-radius:12px;cursor:pointer}
+.row.cur{background:var(--bg2)}.row.cur b{color:var(--fox)}
+.row .art{width:48px;height:48px;flex:none;font-size:1.4rem}
+.rt{flex:1;min-width:0}
+.del{border:0;background:none;color:var(--mute);padding:8px}
+.hint{color:var(--mute);margin:16px 0}
+input[type=search],input[type=url]{width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);font-size:1rem;margin:6px 0 10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.chip{border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:6px 14px;font-size:.85rem}
+.chip.on{background:var(--fox);border-color:var(--fox);color:#fff}
+.btn{background:var(--fox);color:#fff;border:0;border-radius:999px;padding:11px 22px;font-weight:700;margin:4px 8px 4px 0}
+.btn.alt{background:var(--bg2);color:var(--ink);border:1px solid var(--line)}
+#tabs{position:fixed;bottom:0;left:0;right:0;z-index:8;display:flex;background:var(--glass);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+#tabs button{flex:1;border:0;background:none;color:var(--mute);padding:8px 0;font-size:.72rem;display:grid;justify-items:center}
+#tabs button span{font-size:1.3rem}#tabs button.on{color:var(--fox)}
+#mini{position:fixed;left:10px;right:10px;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:7;display:none;align-items:center;gap:10px;padding:8px 10px;border-radius:16px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 6px 24px #0003;cursor:pointer}
+#ms{width:56px;height:32px;flex:none}
+.mt{flex:1;min-width:0}.mt b,.mt small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mt small{color:var(--mute);font-size:.8rem}
+#mini button{border:0;background:none;font-size:1.3rem;padding:6px}
+#sheet{position:fixed;inset:0;z-index:20;background:var(--bg);transform:translateY(105%);transition:transform .3s;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 8px) 20px calc(env(safe-area-inset-bottom,0px) + 24px)}
+#sheet.open{transform:none}
+#cls{border:0;background:none;font-size:1.8rem;display:block;margin:0 auto;color:var(--mute)}
+#fs{width:min(100%,480px);aspect-ratio:16/9;margin:8px auto 16px}
+.meta{max-width:480px;margin:auto}.meta b{font-size:1.3rem;display:block}.meta small{color:var(--mute)}
+.prog{max-width:480px;margin:14px auto 0;display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--mute)}
+input[type=range]{flex:1;accent-color:var(--fox)}
+.ctl{display:flex;justify-content:center;align-items:center;gap:28px;margin:10px 0}
+.ctl button{border:0;background:none;font-size:2rem}
+.ctl .big{background:var(--fox);color:#fff;border-radius:50%;width:68px;height:68px;font-size:1.8rem}
+.ex{text-align:center;margin-bottom:10px}
+#sheet h3{max-width:480px;margin:18px auto 6px}#upn{max-width:480px;margin:auto}
+#media{position:fixed;z-index:30;border-radius:8px;overflow:hidden;background:#000;display:none;container-type:size}
+#yf{width:100%;height:100%;border:0;display:none}
+#art{width:100%;height:100%;display:grid;place-items:center;font-size:clamp(14px,45cqh,64px)}
+</style>
+</head>
+<body>
+<header><h1 id="ttl">Home</h1><button id="theme" aria-label="Toggle theme">🌓</button></header>
+
+<main>
+  <section class="view on" id="v-home"><div id="home"></div></section>
+  <section class="view" id="v-lib">
+    <input id="q" type="search" placeholder="Search your library…">
+    <div class="chips" id="chips"></div>
+    <div id="lib"></div>
+  </section>
+  <section class="view" id="v-add">
+    <h2>Add from YouTube Music</h2>
+    <input id="yurl" type="url" placeholder="Paste a music.youtube.com or youtube.com song link">
+    <button class="btn" id="addplay">▶ Add &amp; play</button><button class="btn alt" id="addlib">＋ Add to library</button>
+    <p class="hint" id="ymsg">Songs play inside this page through YouTube’s official player, with no redirect. Titles fill in automatically once a song plays.</p>
+    <h2>Downloads</h2>
+    <input id="durl" type="url" placeholder="Direct link to an audio file you have the rights to">
+    <input id="dname" type="search" placeholder="Name (optional)">
+    <button class="btn" id="dl">⬇ Download</button>
+    <p class="hint" id="dmsg">Saves the file inside the app so it plays offline. The host of the file must allow it. Only download music you’re allowed to keep.</p>
+    <h2>Your own music</h2>
+    <button class="btn alt" id="addf">🎵 Add songs from my phone</button>
+    <input type="file" id="files" accept="audio/*" multiple hidden>
+    <p class="hint">Songs you add or download are saved inside the app and stay after you close it. YouTube songs are remembered too.</p>
+  </section>
+</main>
+
+<div id="mini">
+  <div id="ms"></div>
+  <div class="mt"><b id="mt"></b><small id="ma"></small></div>
+  <button id="pp" aria-label="Play or pause">▶</button><button id="nx2" aria-label="Next">⏭</button>
+</div>
+
+<div id="tabs">
+  <button data-v="home" class="on"><span>🏠</span>Home</button>
+  <button data-v="lib"><span>📚</span>Library</button>
+  <button data-v="add"><span>＋</span>Add</button>
+</div>
+
+<div id="sheet">
+  <button id="cls" aria-label="Close">⌄</button>
+  <div id="fs"></div>
+  <div class="meta"><b id="st"></b><small id="sa"></small></div>
+  <div class="prog"><span id="tc">0:00</span><input id="seek" type="range" min="0" max="1000" value="0"><span id="td">0:00</span></div>
+  <div class="ctl"><button id="pv" aria-label="Previous">⏮</button><button class="big" id="pp2" aria-label="Play or pause">▶</button><button id="nx" aria-label="Next">⏭</button></div>
+  <div class="ex"><button class="chip" id="sl">😴 Sleep: off</button></div>
+  <h3>Up next</h3><div id="upn"></div>
+</div>
+
+<div id="media">
+  <div id="art"></div>
+  <iframe id="yf" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=s=>{s=Math.max(0,s|0);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const SYN=[
+{t:"Ember Trail",a:"Fox Originals",bpm:92,root:57,sc:[0,2,3,5,7,8,10],mel:[0,2,4,2,5,4,2,0,1,3,5,3,6,5,3,-1],bass:[0,0,5,5,3,3,4,4],w:"triangle",e:"🔥",c:"#f2701d"},
+{t:"Snowfall Den",a:"Fox Originals",bpm:70,root:60,sc:[0,2,4,5,7,9,11],mel:[0,-1,2,-1,4,-1,2,-1,3,-1,5,-1,4,2,1,-1],bass:[0,0,3,3,4,4,0,0],w:"sine",e:"❄️",c:"#4a90c8"},
+{t:"Moonlit Hunt",a:"Fox Originals",bpm:104,root:55,sc:[0,2,3,5,7,8,11],mel:[0,3,5,3,6,5,3,2,0,3,6,3,7,6,5,3],bass:[0,0,0,0,5,5,4,4],w:"sawtooth",e:"🌙",c:"#6a4cc4"},
+{t:"Meadow Dash",a:"Fox Originals",bpm:128,root:62,sc:[0,2,4,5,7,9,11],mel:[0,2,4,5,4,2,0,2,4,7,5,4,2,4,0,-1],bass:[0,0,3,3,4,4,0,0],w:"square",e:"🌿",c:"#3da35d"}
+];
+let saved=[];try{saved=JSON.parse(localStorage.getItem("fm-lib")||"[]")}catch(e){}
+const tracks=[...SYN.map(x=>({...x,k:"syn"})),...saved.map(x=>({k:"yt",vid:x.vid,t:x.t,a:x.a,e:"▶",c:"#d9382f"}))];
+const save=()=>{try{localStorage.setItem("fm-lib",JSON.stringify(tracks.filter(x=>x.k==="yt").map(x=>({vid:x.vid,t:x.t,a:x.a}))))}catch(e){}};
+let cur=-1,playing=false,flt="all",q="",yReady=false,ycur=0,ydur=0,hs,tries=0;
+const au=new Audio(),yf=$("yf");
+au.onended=()=>play(cur+1);
+
+/* synth engine */
+let ctx,tm,nt=0,st=0,t0=0;
+function nn(T,d,t,L,v,o,w){const x=ctx.createOscillator(),g=ctx.createGain(),n=T.root+o+12*Math.floor(d/7)+T.sc[((d%7)+7)%7];x.type=w;x.frequency.value=440*Math.pow(2,(n-69)/12);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+L);x.connect(g);g.connect(ctx.destination);x.start(t);x.stop(t+L+.05)}
+function sched(){const T=tracks[cur],sd=60/T.bpm/2;while(nt<ctx.currentTime+.2){const i=st%32,d=T.mel[i%16];if(d>=0)nn(T,d+(i<16?0:2),nt,sd*1.8,.2,12,T.w);if(i%2===0)nn(T,T.bass[(i/2)%8],nt,sd*3.5,.28,-12,"sine");nt+=sd;st++}}
+
+/* youtube player (official embed, controlled through postMessage) */
+const ytCmd=(f,a=[])=>{if(yReady)yf.contentWindow.postMessage(JSON.stringify({event:"command",func:f,args:a}),"*")};
+yf.onload=()=>{clearInterval(hs);tries=0;hs=setInterval(()=>{if(yReady||++tries>30)return clearInterval(hs);yf.contentWindow.postMessage(JSON.stringify({event:"listening",id:1,channel:"widget"}),"*")},300)};
+addEventListener("message",e=>{
+  if(e.source!==yf.contentWindow)return;
+  let d;try{d=JSON.parse(e.data)}catch(x){return}
+  if(d.event==="onReady"||d.event==="initialDelivery")yReady=true;
+  if(!d.info)return;
+  const T=tracks[cur];if(!T||T.k!=="yt")return;
+  const i=d.info;
+  if(i.currentTime!=null)ycur=i.currentTime;
+  if(i.duration)ydur=i.duration;
+  if(i.videoData&&i.videoData.video_id===T.vid&&i.videoData.title&&T.t!==i.videoData.title){T.t=i.videoData.title;T.a=i.videoData.author||"YouTube";save();ui()}
+  if(i.playerState!=null){
+    if(i.playerState===0)return play(cur+1);
+    const p=i.playerState===1;if(i.playerState!==3&&p!==playing){playing=p;btns()}
+  }
+});
+
+/* playback */
+function stopAll(){clearInterval(tm);au.pause();if(ctx)ctx.suspend();if(tracks[cur]&&tracks[cur].k==="yt")ytCmd("pauseVideo")}
+function play(i){
+  if(!tracks.length)return;
+  if(cur>=0)stopAll();
+  cur=(i+tracks.length)%tracks.length;const T=tracks[cur];
+  ycur=0;ydur=0;playing=true;
+  if(T.k==="syn"){ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();ctx.resume();st=0;nt=t0=ctx.currentTime+.05;tm=setInterval(sched,40)}
+  else if(T.k==="file"){au.src=T.url;au.play()}
+  else if(yReady)ytCmd("loadVideoById",[T.vid]);
+  else yf.src="https://www.youtube-nocookie.com/embed/"+T.vid+"?autoplay=1&playsinline=1&enablejsapi=1";
+  ui();
+}
+function toggle(){
+  if(cur<0)return play(0);
+  const T=tracks[cur];
+  if(playing){if(T.k==="syn"){clearInterval(tm);ctx.suspend()}else if(T.k==="file")au.pause();else ytCmd("pauseVideo");playing=false}
+  else{if(T.k==="syn"){ctx.resume();nt=Math.max(nt,ctx.currentTime+.05);tm=setInterval(sched,40)}else if(T.k==="file")au.play();else ytCmd("playVideo");playing=true}
+  btns();
+}
+function del(i){const X=tracks[i];if(X&&X.id)tx("readwrite",s=>s.delete(X.id)).catch(()=>{});
+  if(i===cur){stopAll();playing=false;cur=-1}else if(i<cur)cur--;
+  tracks.splice(i,1);save();ui();
+}
+function pos(){
+  const T=tracks[cur];if(!T)return[0,0];
+  if(T.k==="syn"){const D=32*60/T.bpm/2;return[((ctx.currentTime-t0)%D+D)%D,D]}
+  if(T.k==="file")return[au.currentTime||0,au.duration||0];
+  return[ycur,ydur];
+}
+
+/* ui */
+const art=x=>`<div class="art" style="background:linear-gradient(135deg,${x.c},#2b1a0e)">${x.k==="yt"?`<img alt="" src="https://i.ytimg.com/vi/${esc(x.vid)}/mqdefault.jpg" onerror="this.remove()">`:""}<span>${x.e}</span></div>`;
+const btns=()=>["pp","pp2"].forEach(i=>$(i).textContent=playing?"⏸":"▶");
+function renderAll(){
+  const fl=[["syn","Fox Originals"],["yt","YouTube"],["file","On this device"]];
+  let h="";
+  fl.forEach(([k,n])=>{
+    const L=tracks.map((x,i)=>[x,i]).filter(([x])=>x.k===k);
+    if(L.length)h+=`<h2>${n}</h2><div class="hs">${L.map(([x,i])=>`<div class="card" data-i="${i}">${art(x)}<b>${esc(x.t)}</b><small>${esc(x.a)}</small></div>`).join("")}</div>`;
+  });
+  if(!tracks.some(x=>x.k==="yt"))h+=`<p class="hint">Paste a YouTube Music link in the Add tab to build your own library.</p>`;
+  $("home").innerHTML=h;
+  $("chips").innerHTML=[["all","All"],...fl].map(([k,n])=>`<button class="chip ${k===flt?"on":""}" data-f="${k}">${n}</button>`).join("");
+  const s=q.toLowerCase();
+  $("lib").innerHTML=tracks.map((x,i)=>[x,i]).filter(([x])=>(flt==="all"||x.k===flt)&&(x.t+x.a).toLowerCase().includes(s))
+    .map(([x,i])=>`<div class="row ${i===cur?"cur":""}" data-i="${i}">${art(x)}<div class="rt"><b>${esc(x.t)}</b><small>${esc(x.a)}</small></div>${x.k==="syn"?"":`<button class="del" data-del="${i}" aria-label="Remove">✕</button>`}</div>`).join("")||`<p class="hint">Nothing here yet.</p>`;
+}
+function ui(){
+  const T=tracks[cur];
+  $("mini").style.display=T?"flex":"none";
+  if(T){
+    $("mt").textContent=$("st").textContent=T.t;
+    $("ma").textContent=$("sa").textContent=T.a;
+    $("art").style.background=`linear-gradient(135deg,${T.c},#2b1a0e)`;$("art").textContent=T.e;
+    const y=T.k==="yt";yf.style.display=y?"block":"none";$("art").style.display=y?"none":"grid";
+    $("seek").disabled=T.k==="syn";
+    let u="";for(let k=1;k<=6&&k<tracks.length;k++){const i=(cur+k)%tracks.length,x=tracks[i];u+=`<div class="row" data-i="${i}">${art(x)}<div class="rt"><b>${esc(x.t)}</b><small>${esc(x.a)}</small></div></div>`}
+    $("upn").innerHTML=u;
+  }
+  btns();renderAll();
+}
+function loop(){
+  requestAnimationFrame(loop);
+  const M=$("media");
+  if(cur<0){M.style.display="none";return}
+  const open=$("sheet").classList.contains("open"),r=$(open?"fs":"ms").getBoundingClientRect();
+  Object.assign(M.style,{display:"block",left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px",pointerEvents:open?"auto":"none"});
+  const[e,D]=pos();
+  $("tc").textContent=fmt(e);$("td").textContent=D?fmt(D):"–:––";
+  if(D&&document.activeElement!==$("seek"))$("seek").value=e/D*1000;
+}
+loop();
+
+/* events */
+document.addEventListener("click",e=>{
+  const d=e.target.closest("[data-del]");if(d){del(+d.dataset.del);return}
+  const f=e.target.closest("[data-f]");if(f){flt=f.dataset.f;renderAll();return}
+  const r=e.target.closest("[data-i]");if(r)play(+r.dataset.i);
+});
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+b.dataset.v));
+  $("ttl").textContent={home:"Home",lib:"Library",add:"Add"}[b.dataset.v];scrollTo(0,0);
+});
+$("mini").onclick=e=>{if(!e.target.closest("button"))$("sheet").classList.add("open")};
+$("cls").onclick=()=>$("sheet").classList.remove("open");
+$("pp").onclick=$("pp2").onclick=toggle;
+$("nx").onclick=$("nx2").onclick=()=>play(cur+1);
+$("pv").onclick=()=>play(cur-1);
+$("q").oninput=e=>{q=e.target.value;renderAll()};
+$("seek").oninput=e=>{
+  const T=tracks[cur],D=pos()[1];if(!T||!D)return;
+  const s=e.target.value/1000*D;
+  if(T.k==="file")au.currentTime=s;else if(T.k==="yt"){ycur=s;ytCmd("seekTo",[s,true])}
+};
+let sl=0,slT;const SL=[0,15,30,60];
+$("sl").onclick=()=>{
+  sl=(sl+1)%4;clearTimeout(slT);
+  $("sl").textContent="😴 Sleep: "+(SL[sl]?SL[sl]+" min":"off");
+  if(SL[sl])slT=setTimeout(()=>{if(playing)toggle()},SL[sl]*60000);
+};
+function addYT(go){
+  let u,v="";
+  try{u=new URL($("yurl").value.trim());v=u.searchParams.get("v")||(u.hostname==="youtu.be"?u.pathname.slice(1):(u.pathname.match(/^\/(?:shorts|embed)\/([\w-]{11})/)||[])[1]||"")}catch(x){}
+  if(!/^[\w-]{11}$/.test(v)){$("ymsg").textContent="I couldn’t find a song in that link. Paste a link to a single song.";return}
+  let i=tracks.findIndex(x=>x.k==="yt"&&x.vid===v);
+  if(i<0){tracks.push({k:"yt",vid:v,t:"YouTube · "+v,a:"YouTube",e:"▶",c:"#d9382f"});i=tracks.length-1;save()}
+  $("yurl").value="";$("ymsg").textContent=go?"Playing from YouTube inside this page.":"Added to your library.";
+  if(go){play(i);$("sheet").classList.add("open")}else ui();
+}
+$("addplay").onclick=()=>addYT(true);
+$("addlib").onclick=()=>addYT(false);
+$("addf").onclick=()=>$("files").click();
+$("files").onchange=e=>{
+  const fs=[...e.target.files];if(!fs.length)return;
+  let first=-1;
+  fs.forEach(f=>{const o={id:"f"+Date.now()+Math.random().toString(36).slice(2,6),name:f.name.replace(/\.[^.]+$/,""),blob:f,a:"My files"};putSong(o.id,o.name,o.blob,o.a).catch(()=>{});const i=addFile(o);if(first<0)first=i});
+  play(first);
+};
+$("theme").onclick=()=>{
+  const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  r.dataset.theme=d?"light":"dark";
+};
+/* offline storage (IndexedDB) */
+const DB=new Promise((res,rej)=>{const r=indexedDB.open("fox-music",1);r.onupgradeneeded=()=>r.result.createObjectStore("songs",{keyPath:"id"});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+DB.catch(()=>{});
+const tx=(m,f)=>DB.then(d=>new Promise((res,rej)=>{const t=d.transaction("songs",m),q=f(t.objectStore("songs"));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)}));
+const putSong=(id,name,blob,a)=>tx("readwrite",s=>s.put({id,name,blob,a}));
+const addFile=o=>{tracks.push({k:"file",id:o.id,t:o.name,a:o.a,url:URL.createObjectURL(o.blob),e:o.a==="Downloads"?"⬇":"🎵",c:"#f2701d"});return tracks.length-1};
+tx("readonly",s=>s.getAll()).then(all=>{(all||[]).forEach(addFile);ui()}).catch(()=>{});
+$("dl").onclick=async()=>{
+  const u=$("durl").value.trim(),m=$("dmsg");
+  try{new URL(u)}catch(e){m.textContent="Paste a valid link.";return}
+  m.textContent="Downloading…";
+  try{
+    const r=await fetch(u);if(!r.ok)throw 0;
+    const len=+r.headers.get("content-length")||0,rd=r.body.getReader(),ch=[];let got=0;
+    for(;;){const{done,value}=await rd.read();if(done)break;ch.push(value);got+=value.length;m.textContent="Downloading… "+(len?Math.round(got/len*100)+"%":(got/1048576).toFixed(1)+" MB")}
+    const type=r.headers.get("content-type")||"audio/mpeg";
+    if(!/^(audio|video|application\/octet)/.test(type)){m.textContent="That link isn’t an audio file.";return}
+    const name=$("dname").value.trim()||decodeURIComponent(u.split("/").pop().split("?")[0]).replace(/\.[^.]+$/,"")||"Download";
+    const o={id:"d"+Date.now(),name,blob:new Blob(ch,{type}),a:"Downloads"};
+    await putSong(o.id,o.name,o.blob,o.a);addFile(o);ui();
+    $("durl").value=$("dname").value="";m.textContent="Saved. Find it in Library under On this device.";
+  }catch(e){m.textContent="Couldn’t download that. The host may block other sites, or the link isn’t a direct audio file."}
+};
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+renderAll();
+</script>
+</body>
+</html>
